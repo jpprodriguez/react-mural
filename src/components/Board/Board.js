@@ -10,7 +10,6 @@ export class Board extends Component {
             noteCount: 0
         }
     }
-    
     render() {
         let noteList = this.state.notes;
         const notes = noteList.map((note) => {
