@@ -1,0 +1,7 @@
+.container {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 190px - 96px);
+    background-color: beige;
+    box-shadow: inset 0px 0px 12px 0px rosybrown;
+}
