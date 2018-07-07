@@ -3,12 +3,14 @@ import './Board.css';
 import { StickyNote } from '../StickyNote/StickyNote';
 
 export class Board extends Component {
+    noteClicked;
     constructor(props) {
         super(props);
         this.state = {
             notes: Array(),
             noteCount: 0
         }
+        this.noteClicked = false;
     }
     render() {
         let noteList = this.state.notes;
@@ -18,30 +20,38 @@ export class Board extends Component {
                     key={note.id}
                     posX={note.posX}
                     posY={note.posY}
+                    noteClicked={() => {this.noteClickHandle()}}
                 >
                 </StickyNote>
             );
         });
         return (
-            <div className='container' onClick={e => this.onBoardClicked(e)}>
-                {notes}
+            <div className='container' onClick={e => this.boardClickHandle(e)}>
+            {notes}
             </div>
         )
     }
 
-    onBoardClicked(event) {
-        console.log(event.nativeEvent.offsetX);
-        console.log(event.nativeEvent.offsetY);
-        let noteList = this.state.notes;
-        let noteCount = this.state.noteCount + 1;
-        this.setState({
-            notes: noteList.concat({
-               id: noteCount,
-               posX: event.nativeEvent.offsetX,
-               posY: event.nativeEvent.offsetY
-            }),
-            noteCount: noteCount
-        });
+    noteClickHandle() {
+        this.noteClicked = true;
+    }
+    boardClickHandle(event) {
+        if (!this.noteClicked) {
+            console.log(event.nativeEvent.offsetX);
+            console.log(event.nativeEvent.offsetY);
+            let noteList = this.state.notes;
+            let noteCount = this.state.noteCount + 1;
+            this.setState({
+                notes: noteList.concat({
+                    id: noteCount,
+                    posX: event.nativeEvent.offsetX,
+                    posY: event.nativeEvent.offsetY
+                }),
+                noteCount: noteCount
+            });
+        } else {
+            this.noteClicked = false;
+        }
     }
 }
 
