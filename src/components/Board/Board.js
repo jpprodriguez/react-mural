@@ -23,13 +23,15 @@ export class Board extends Component {
                 <StickyNote
                     key={note.id}
                     selected={note.selected}
+                    editable={note.editable}
                     zIndex={note.zIndex}
                     width={this.noteWidth}
                     height={this.noteHeight}
                     posX={note.posX}
                     posY={note.posY}
-                    noteClicked={(e) => {this.noteClickHandle(note,e)}}
-                    noteDoubleClicked={() => {this.noteDoubleClickHandle(note)}}
+                    dblClickDelay={this.props.dblClickDelay}
+                    noteClicked={(shiftKeyPressed) => {this.noteClickHandle(note,shiftKeyPressed,false)}}
+                    noteDoubleClicked={(shiftKeyPressed) => {this.noteClickHandle(note,shiftKeyPressed,true)}}
                 >
                 </StickyNote>
             );
@@ -37,45 +39,46 @@ export class Board extends Component {
         return (
             <div
                 className='container'
-                onClick={(e) => this.boardClickHandler(e, 250, this)}
+                onClick={(e) => this.boardClickHandler(e, this.props.dblClickDelay)}
             >
             {notes}
             </div>
         )
     }
 
-    noteClickHandle(note,event) {
+    noteClickHandle(note,shiftKeyPressed,isDblClick) {
         this.noteClicked = true;
         let selectedNotes = this.state.selectedNotes.slice();
         let noteList = this.state.notes.slice();
         let index = noteList.indexOf(note);
+        let isNoteEditable = note.editable ? true : false;
 
-        if(!event.shiftKey && selectedNotes.length > 0) {
+        if(!shiftKeyPressed && selectedNotes.length > 0) {
             noteList = this.restoreNotesZIndex(noteList, selectedNotes);
             selectedNotes = Array();
         }
 
-        note.zIndex = 9999;
-        note.selected = true;
-        noteList[index] = note;
+        noteList[index].zIndex = 9999;
+        noteList[index].selected = true;
+        if(isDblClick || isNoteEditable) {
+            noteList[index].editable = true;
+        }
 
         this.setState({
             notes: noteList,
-            selectedNotes: selectedNotes.concat(note)
+            selectedNotes: selectedNotes.concat(noteList[index])
         });
     }
-    noteDoubleClickHandle(note) {
-        this.noteClicked = true;
-    }
-    boardClickHandler(event, delay, self) {
-        if (!self.clickTimeoutID) {
-            self.clickTimeoutID = setTimeout(function () {
+    boardClickHandler(event, delay) {
+        let self = this;
+        if (!this.clickTimeoutID) {
+            this.clickTimeoutID = setTimeout(function () {
                 self.boardSingleClickHandle();
                 self.clickTimeoutID = null
             }, delay);
         } else {
-            self.clickTimeoutID = clearTimeout(self.clickTimeoutID);
-            self.boardDoubleClickHandle(event);
+            this.clickTimeoutID = clearTimeout(this.clickTimeoutID);
+            this.boardDoubleClickHandle(event);
         }
     }
     boardSingleClickHandle() {
@@ -101,6 +104,7 @@ export class Board extends Component {
             let newNote = {
                 id: noteCount,
                 selected: true,
+                editable: true,
                 zIndex: noteCount,
                 posX: pos.posX,
                 posY: pos.posY
@@ -151,6 +155,7 @@ export class Board extends Component {
             let index = newNotes.indexOf(note);
             newNotes[index].zIndex = note.id;
             newNotes[index].selected = false;
+            newNotes[index].editable = false;
         }
         return newNotes;
     }

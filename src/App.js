@@ -7,6 +7,7 @@ import sizeMe from "react-sizeme";
 const BoardWithSize = sizeMe({ monitorHeight: true })(Board);
 
 class App extends Component {
+     doubleClickDelay = 150;
   render() {
     return (
       <div className="App">
@@ -16,7 +17,7 @@ class App extends Component {
             <h1 className="App-title">React Mural</h1>
         </header>
         <div className="Board-container">
-            <BoardWithSize></BoardWithSize>
+            <BoardWithSize dblClickDelay={this.doubleClickDelay}></BoardWithSize>
         </div>
       </div>
     );
