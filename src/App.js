@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Board } from './components/Board/Board';
+import sizeMe from "react-sizeme";
+
+const BoardWithSize = sizeMe({ monitorHeight: true })(Board);
 
 class App extends Component {
   render() {
@@ -13,7 +16,7 @@ class App extends Component {
             <h1 className="App-title">React Mural</h1>
         </header>
         <div className="Board-container">
-            <Board></Board>
+            <BoardWithSize></BoardWithSize>
         </div>
       </div>
     );
