@@ -4,6 +4,9 @@
     background-color: yellow;
     padding: 10px;
 }
+.note-container.selected {
+    outline: 1px solid blue;
+}
 .note-container textarea {
     resize: none;
     width: 100%;

@@ -11,14 +11,12 @@ export function StickyNote(props){
     };
     return (
         <div
-            className='note-container'
-            tabIndex={0}
+            className={props.selected ? 'note-container selected' : 'note-container'}
             style={noteStyle}
             onClick={props.noteClicked}
-            onFocus={props.noteFocus}
-            onBlur={props.noteBlur}
+            onDoubleClick={props.noteDoubleClicked}
         >
-            <textarea></textarea>
+            <textarea disabled={true}></textarea>
         </div>
     )
 }
