@@ -7,6 +7,7 @@ export class Board extends Component {
     noteHeight = 100;
     noteClicked = false;
     clickTimeoutID = null;
+    clipboardNotes = null;
     constructor(props) {
         super(props);
         this.state = {
@@ -39,13 +40,67 @@ export class Board extends Component {
         return (
             <div
                 className='container'
+                tabIndex={0}
                 onClick={(e) => this.boardClickHandler(e, this.props.dblClickDelay)}
+                onKeyDown={(e) => {this.boardKeyPressHandle(e)}}
             >
             {notes}
             </div>
         )
     }
-
+    boardKeyPressHandle(e) {
+        if(e.ctrlKey) {
+            if(e.key === 'c') {
+                if(this.state.selectedNotes.length > 0) {
+                    this.clipboardNotes = this.state.selectedNotes.slice();
+                }
+            } else if(e.key === 'v') {
+                if(this.clipboardNotes) {
+                    let newNotes = this.state.notes.slice();
+                    let selectedNotes = this.state.selectedNotes ? this.state.selectedNotes.slice() : Array();
+                    for(let note of this.clipboardNotes) {
+                        this.state.noteCount ++;
+                        let newNote = {
+                            id: this.state.noteCount,
+                            selected: true,
+                            editable: false,
+                            zIndex: this.state.noteCount,
+                            posX: Math.floor((Math.random() * (this.props.size.width - 100)) + 1),
+                            posY: Math.floor((Math.random() * (this.props.size.height - 100)) + 1)
+                        }
+                        newNotes = newNotes.concat(newNote);
+                        selectedNotes = selectedNotes.concat(newNote);
+                    }
+                    this.setState({notes: newNotes, selectedNotes: selectedNotes});
+                }
+            } else if(e.key === 'a') {
+                let notes = this.state.notes.slice();
+                for(let note of notes) {
+                    note.selected = true;
+                }
+                this.setState({notes: notes, selectedNotes: notes});
+            } else if(e.key === 'x') {
+                if(this.state.selectedNotes.length > 0) {
+                    this.clipboardNotes = this.state.selectedNotes.slice();
+                    let notes = this.state.notes.slice();
+                    let newNotes = Array();
+                    for(let note of notes) {
+                        let isClipNote = false
+                        for(let clipNote of this.clipboardNotes) {
+                            if(clipNote.id === note.id) {
+                                isClipNote = true;
+                                break;
+                            }
+                        }
+                        if(!isClipNote) {
+                            newNotes.push(note);
+                        }
+                    }
+                    this.setState({notes: newNotes, selectedNotes: Array()});
+                }
+            }
+        }
+    }
     noteClickHandle(note,shiftKeyPressed,isDblClick) {
         this.noteClicked = true;
         let selectedNotes = this.state.selectedNotes.slice();
