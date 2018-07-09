@@ -33,6 +33,8 @@ export class Board extends Component {
                     dblClickDelay={this.props.dblClickDelay}
                     noteClicked={(shiftKeyPressed) => {this.noteClickHandle(note,shiftKeyPressed,false)}}
                     noteDoubleClicked={(shiftKeyPressed) => {this.noteClickHandle(note,shiftKeyPressed,true)}}
+                    textUpdated={(newText)=>{this.updateNoteText(note, newText)}}
+                    text={note.text}
                 >
                 </StickyNote>
             );
@@ -48,6 +50,13 @@ export class Board extends Component {
             </div>
         )
     }
+    updateNoteText(note, newText) {
+        if(note.text !== newText) {
+            let notes = this.state.notes.slice();
+            notes[notes.indexOf(note)].text = newText;
+            this.setState({notes: notes});
+        }
+    }
     boardKeyPressHandle(e) {
         if(e.ctrlKey) {
             if(e.key === 'c') {
@@ -58,10 +67,12 @@ export class Board extends Component {
                 if(this.clipboardNotes) {
                     let newNotes = this.state.notes.slice();
                     let selectedNotes = this.state.selectedNotes ? this.state.selectedNotes.slice() : Array();
+                    let noteCount = this.state.noteCount;
                     for(let note of this.clipboardNotes) {
-                        this.state.noteCount ++;
+                        noteCount ++;
                         let newNote = {
-                            id: this.state.noteCount,
+                            id: noteCount,
+                            text: note.text,
                             selected: true,
                             editable: false,
                             zIndex: this.state.noteCount,
@@ -71,7 +82,7 @@ export class Board extends Component {
                         newNotes = newNotes.concat(newNote);
                         selectedNotes = selectedNotes.concat(newNote);
                     }
-                    this.setState({notes: newNotes, selectedNotes: selectedNotes});
+                    this.setState({notes: newNotes, selectedNotes: selectedNotes, noteCount: noteCount});
                 }
             } else if(e.key === 'a') {
                 let notes = this.state.notes.slice();
@@ -158,6 +169,7 @@ export class Board extends Component {
             let pos = this.validateNotePosition(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
             let newNote = {
                 id: noteCount,
+                text: '',
                 selected: true,
                 editable: true,
                 zIndex: noteCount,

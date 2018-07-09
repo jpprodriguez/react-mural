@@ -27,6 +27,8 @@
     position: absolute;
     top: -9px;
     left: calc(50% - 30px);
+    pointer-events: none;
+    user-select: none;
 }
 
 @keyframes shake-note{

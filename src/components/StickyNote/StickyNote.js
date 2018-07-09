@@ -3,7 +3,7 @@ import './StickyNote.css';
 
 export class StickyNote extends Component {
     clickTimeoutID = null;
-    text;
+    textElement;
     constructor(props) {
         super(props);
         this.noteStyle = {
@@ -16,12 +16,12 @@ export class StickyNote extends Component {
     }
     componentDidMount(){
         if(this.props.editable) {
-            this.text.focus();
+            this.textElement.focus();
         }
     }
     componentDidUpdate(prevProps) {
         if(this.props.editable && !prevProps.editable) {
-            this.text.focus();
+            this.textElement.focus();
         }
     }
     render() {
@@ -38,16 +38,22 @@ export class StickyNote extends Component {
                 style={this.noteStyle}
                 onClick={(e) => this.noteClickHandler(e,this.props.dblClickDelay)}
             >
-                <img src={'/pin.png'}></img>
+                <img alt="pin" src={'/pin.png'}></img>
                 <textarea
                     disabled={!this.props.editable}
-                    ref={(ref) => {this.text = ref}}
+                    ref={(ref) => {this.textElement = ref}}
+                    defaultValue={this.props.text}
+                    onChange={this.textUpdateHandle()}
                 >
                 </textarea>
             </div>
         )
     }
-
+    textUpdateHandle() {
+        if(this.textElement) {
+            this.props.textUpdated(this.textElement.value);
+        }
+    }
     noteClickHandler(event, delay) {
         let self = this;
         let shiftKeyPressed = event.shiftKey ? true : false;
