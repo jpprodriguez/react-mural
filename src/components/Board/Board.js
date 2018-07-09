@@ -3,8 +3,8 @@ import './Board.css';
 import { StickyNote } from '../StickyNote/StickyNote';
 
 export class Board extends Component {
-    noteWidth = 100;
-    noteHeight = 100;
+    noteWidth = 200;
+    noteHeight = 200;
     noteClicked = false;
     clickTimeoutID = null;
     clipboardNotes = null;
@@ -65,8 +65,8 @@ export class Board extends Component {
                             selected: true,
                             editable: false,
                             zIndex: this.state.noteCount,
-                            posX: Math.floor((Math.random() * (this.props.size.width - 100)) + 1),
-                            posY: Math.floor((Math.random() * (this.props.size.height - 100)) + 1)
+                            posX: Math.floor((Math.random() * (this.props.size.width - this.noteWidth)) + 1),
+                            posY: Math.floor((Math.random() * (this.props.size.height - this.noteHeight)) + 1)
                         }
                         newNotes = newNotes.concat(newNote);
                         selectedNotes = selectedNotes.concat(newNote);
@@ -198,7 +198,7 @@ export class Board extends Component {
             pos.posY = this.props.size.height - this.noteHeight;
         }
         else if(pos.posY < 0) {
-            pos.posY = 0;
+            pos.posY = 10;
         }
 
         return pos;

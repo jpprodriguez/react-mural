@@ -38,6 +38,7 @@ export class StickyNote extends Component {
                 style={this.noteStyle}
                 onClick={(e) => this.noteClickHandler(e,this.props.dblClickDelay)}
             >
+                <img src={'/pin.png'}></img>
                 <textarea
                     disabled={!this.props.editable}
                     ref={(ref) => {this.text = ref}}
