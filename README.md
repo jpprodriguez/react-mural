@@ -16,3 +16,8 @@ This repo contains my very first react app. It consists of a very simple mural t
 - **Ctrl + x** to cut selected notes
 - **Ctrl + v** to paste copied notes
 
+## How to run the app
+1) Clone/Download the repository
+2) open terminal tab and cd to repo location
+3) npm start
+4) open a new browser tab with the url "localhost:3000"
