@@ -1,6 +1,37 @@
 .note-container {
     position: absolute;
-    width: 100px;
-    height: 100px;
-    background-color: yellow;
+    box-shadow: inset 0px 0px 1px 0px rosybrown;
+    background-color: #fafeb4;
+    padding: 10px;
+}
+.note-container.selected {
+    box-shadow: inset 0px 0px 12px 0px rosybrown;
+    animation: shake-note 2 0.15s linear;
+}
+.note-container textarea {
+    background-color: #f0f3bb;
+    font-family: Roboto;
+    font-size: 14px;
+    color: grey;
+    resize: none;
+    height: calc(100% - 20px);
+    padding: 10px;
+    border: none;
+}
+.note-container textarea:focus {
+    outline: 0px;
+    background: #f6f9c1;
+}
+.note-container img{
+    width: 43px;
+    position: absolute;
+    top: -9px;
+    left: calc(50% - 30px);
+    pointer-events: none;
+    user-select: none;
+}
+
+@keyframes shake-note{
+    0%    { transform: translate(1px) }
+    50%   { transform: translate(-1px) }
 }

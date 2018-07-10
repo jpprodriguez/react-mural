@@ -1,7 +1,11 @@
 .container {
     position: relative;
+    overflow: scroll;
     width: 100%;
     height: calc(100vh - 190px - 96px);
-    background-color: beige;
-    box-shadow: inset 0px 0px 12px 0px rosybrown;
+    border: 4px solid #7b4806;
+    background: url('board-background.png');
+}
+.container:focus {
+    outline: 0px;
 }
